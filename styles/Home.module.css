@@ -1,0 +1,32 @@
+
+  .mobile{
+    display: none;
+  }
+
+  .reviewsTittle{
+    margin: 0px;
+    margin-top: 20px;
+    font-size: 35px;
+    background: var(--pinkGradientText);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  
+  @media only screen and (max-width: 768px) {
+    .desktop{
+      display: none;
+    }
+
+    .mobile{
+      display: block;
+    }
+ 
+    .bestClientsDeal{
+      padding: 60px 5px;
+    }
+
+    .mobileCardsContainer{
+      padding: 0px 18px;
+    }
+  }

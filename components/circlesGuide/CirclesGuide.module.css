@@ -1,0 +1,27 @@
+/* -------Desktop-------- */
+
+.circlesContainer{
+    margin: 100px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    height: 500px;
+    overflow: scroll;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.circleImages{
+    margin: 150px 0px;
+    transition: all 0.7s linear;
+}
+
+.progressBar{
+    height: 6px;
+    background-image: var(--pinkGradientCards);
+    display: block;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    transition: all 0.3s linear;
+}

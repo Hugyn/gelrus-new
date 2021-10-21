@@ -1,0 +1,90 @@
+/*--------------------- Desktop Navbar ---------------------*/
+.logo{ 
+    width: 20vmin;
+}
+
+.desktopNavbarContainer{
+    display: block;
+    background: #434343;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.desktopNavbar{
+    display: flex;
+    justify-content: space-between;
+}
+
+.desktopNavLinksContainer{
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 900px;
+}
+
+.desktopNavLinks{
+    color: white;
+    font-size: 17px;
+}
+
+.cardsContainer{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+/*--------------------- Mobile Navbar ---------------------*/
+.mobileNavbar{
+    display: none;
+    justify-content: center;
+}
+
+.mobileNavLinksContainer{
+    background-image: url('/navbarBackground.png');
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    background-position: center;
+    background-size: cover;
+    z-index: 999;
+    -webkit-transform: translateZ(0);
+}
+
+.mobileNavLinksOuter{
+    margin-left: 30px;
+    width: 100%;
+    height: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+
+
+.mobileNavLinks{
+    letter-spacing: .9px;
+    font-size: 27px;
+    cursor: pointer;
+    font-weight: 700;
+    background: var(--pinkGradientText);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media only screen and (max-width: 768px) {
+    .desktopNavbarContainer{
+        display: none;
+    }
+    .mobileLogo{
+        position: relative;
+        z-index: 9999;
+        display: block;
+    }
+    .mobileNavbar{
+        display: flex;
+    }
+}
+

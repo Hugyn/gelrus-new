@@ -1,0 +1,45 @@
+.css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root{
+    border-radius: 30px !important;
+    background-color:#F3F3F3;
+}
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+    height:1em;
+}
+
+.css-bkrceb-MuiButtonBase-root-MuiPickersDay-root{
+    color:#323537;
+   background-color:#F3F3F3;
+}
+.css-bkrceb-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+    background-image:var(--pinkGradientCards);
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root{
+    background: -webkit-linear-gradient(0deg, rgb(161,140,209), rgb(251,194,235) 60%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.css-tuwirq-MuiTabs-root{
+    display: none;
+}
+.css-13go44a-MuiButtonBase-root-MuiIconButton-root{
+    background: -webkit-linear-gradient(0deg, rgb(161,140,209), rgb(251,194,235) 60%);
+}
+
+.css-12ha4i7, .css-7lip4c{
+    background-color: #323537;
+}
+
+.css-118whkv{
+    background-image:var(--pinkGradientCards);
+    border-color: #323537 ;
+}
+
+.css-2ujp1m{
+    border-color: #888b8d;
+}
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper{
+    border-radius: 20px;
+}

@@ -1,0 +1,46 @@
+.reviewsContainer{
+    display: flex;
+    -ms-overflow-style: none;  /* IE and Edge */
+     scrollbar-width: none;
+    padding: 10px;
+    overflow-x: scroll;
+}
+
+.reviewsContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+.reviewsContainer > .reviewCard{
+    margin: 10px;
+}
+
+.reviewCard{
+    border: 2px solid black;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    max-width:fit-content;
+    background-color: white;
+}
+
+.star{
+    width: 15px;
+    margin: 1px;
+}
+
+.reviewStars{
+    display: flex;
+    margin: 5px 0px;
+}
+
+.reviewUserName{
+    margin:2px 3px;
+}
+
+.reviewText{
+    margin:2px 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
