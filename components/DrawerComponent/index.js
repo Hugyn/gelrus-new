@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Container } from '@material-ui/core';
 import { useRouter } from 'next/router';
 
-import BackButton from '../buttons/BackButton';
 
 function DrawerComponent(props) {
   const router = useRouter()
@@ -22,8 +21,6 @@ function DrawerComponent(props) {
           transition={props.transition}
           exit={props.exit}
           >
-            <BackButton onClick={props.onClickBackButton}/>
-
             <Container>
               <motion.h3 
               className={styles.title}
@@ -32,6 +29,7 @@ function DrawerComponent(props) {
               >
                 {props.title}
               </motion.h3>
+              {props.bookingSteps}
             </Container>
             
             <motion.div 

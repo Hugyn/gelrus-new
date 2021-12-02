@@ -14,11 +14,10 @@ function Layout({children}) {
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
             <Navbar/>
-
                 {children}
-                
-            {router.pathname == "/" ? <Footer/> : null}  
-            
+                {router.pathname == "/" ? 
+                <Footer/>
+                : null}  
         </div>
     )
 }
