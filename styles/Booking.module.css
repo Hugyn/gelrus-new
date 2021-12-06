@@ -48,6 +48,21 @@
     opacity: 0.8;
 }
 
+.servicesPickContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.serviceTag{
+    color: white;
+    font-size: 15px;
+    margin-right: 3px;
+    background-image: var(--pinkGradientCards);
+    border-radius: 20px;
+    padding: 3px 7px;
+    display: flex;
+}
+
 
 /* Date Component */
 

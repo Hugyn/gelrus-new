@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import Image from 'next/image'
 
 import { motion } from "framer-motion"
 //-------Style--------
@@ -7,18 +8,22 @@ import styles from '../../styles/Booking.module.css'
 //-------Components--------
 import DrawerComponent from '../../components/DrawerComponent';
 
-
 const Booking = () =>  {
     const [bookingStateIndex, setBookingStateIndex] = useState(1);
-    const [service, setService] = useState({data:null, canProceed:false});
+    const [services, setServices] = useState({data:null, canProceed:false});
     const [date, setDateData] = useState({data:null, canProceed:false});
     const [userDetails, setUserDetails] = useState({data:null, canProceed:false});
 
-    
-    return(
+    useEffect(()=> {
+        //Set session services to state
+        const sessionServices = JSON.parse(sessionStorage.getItem("services"));
+        setServices({data:sessionServices, canProceed:false});
+    },[])
+
+    return (
         <DrawerComponent bookingSteps={<BookingSteps onClick={(t)=> console.log(t)} current={bookingStateIndex}/>} animate={{height:'100%'}}>
             {bookingStateIndex == 1 ?  
-             <Service proceedOnClick={()=> setBookingStateIndex( bookingStateIndex + 1)} canProceed={service.canProceed}/> 
+             <Service proceedOnClick={()=> null} /> 
             : 
             bookingStateIndex == 2 ? 
             <Date canProceed={date.canProceed}/> 
@@ -38,25 +43,49 @@ export default Booking;
 const Service = (props) => {
     const [canProceed, setCanProceed] = useState(null);
     const [services, setServices] = useState([]);
-    
+
     const cards = [
-        {title: "Manicure", id:1, image: "manicure.png" },
-        {title: "Pedicure", id:2, image: "pedicure.png" },
-        {title: "Treatment", id:3, image: "treatment.png" },
-        {title: "Podiatry", id:4, image: "podiatry.png" },
+        {title: "Manicure", id:1, image: "manicure.png"},
+        {title: "Pedicure", id:2, image: "pedicure.png"},
+        {title: "Treatment", id:3, image: "treatment.png"},
+        {title: "Podiatry", id:4, image: "podiatry.png"},
     ]
     
-   const handleServices = (item) => {
-        setServices([...services, item]);
+    const handleServices = (item) => {
+        //When press on card, add the product to the services array
+        //if product does not exist in array add else remove product
+        if(services && !services.includes(item)){
+            setServices([...services, item])
+            sessionStorage.setItem('services', JSON.stringify([...services,item]));
+        } else {
+            setServices(services.filter(function(service){
+                return service !== item
+            }))
+            sessionStorage.setItem('services', JSON.stringify(services.filter(function(service){
+                return service !== item
+            })));
+        }
     }
-    
-    useEffect(()=> {
-        services.length  > 0 ? setCanProceed(true)  : setCanProceed(false)
-    },[services])
 
+    useEffect(()=> {
+      const getSession = JSON.parse(sessionStorage.getItem("services"));
+      setServices(getSession || []);
+      
+    },[])
+    
+    
     return (
          <>
             <div>choose Service</div>
+            <div className={styles.servicesPickContainer}>
+                {services.map((service,index)=> (
+                    <div key={index} id={service} className={styles.serviceTag}>
+                        {service}
+                        <Image onClick={()=> handleServices(service)} className={styles.tagXicon} src="/x-icon.svg" width="20px" height="20px"/>
+                    </div>
+                ))}
+            </div>
+
             <div className={styles.cards}>
                 {cards.map((item)=> 
                     <motion.div 
