@@ -12,7 +12,6 @@ import { useRouter } from 'next/router';
 
 function DrawerComponent(props) {
   const router = useRouter()
-  console.log(router.pathname)
     return (
       <AnimatePresence exitBeforeEnter>
           <motion.div  onPan={props.onPan} className={styles.bookNowPage}
@@ -29,7 +28,7 @@ function DrawerComponent(props) {
               >
                 {props.title}
               </motion.h3>
-              {props.bookingSteps}
+              {props.breadcrumb}
             </Container>
             
             <motion.div 

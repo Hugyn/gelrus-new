@@ -5,8 +5,11 @@ const notion = new Client({
   auth: "secret_aiWXcLI6AE2Pze5an7GYo6AomRbslckk0WbPBrJ1hYG",
 })
 export default async function handler(req, res) {
-    const listUsersResponse = await  notion.users.list()
-
-    res.status(200).json({ name: listUsersResponse.results[0].name })
+    const myPage = await notion.databases.query({
+      database_id: "170ed7a3f0d94065bb2b5f7bd939f1fd",
+      
+    })
+  
+    res.status(200).json({ name: myPage, otherShit: req })
   
 }

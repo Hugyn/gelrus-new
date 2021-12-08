@@ -49,20 +49,26 @@
 }
 
 .servicesPickContainer{
+    margin: 10px 0px;
     display: flex;
     flex-wrap: wrap;
 }
 
 .serviceTag{
     color: white;
-    font-size: 15px;
-    margin-right: 3px;
+    font-size: 14px;
+    margin: 3px;
     background-image: var(--pinkGradientCards);
     border-radius: 20px;
     padding: 3px 7px;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
 }
-
+.serviceTag span{
+    margin-right:8x;
+}
 
 /* Date Component */
 
@@ -72,15 +78,21 @@
 
 /* BookingSteps Component */
 .bookingStepsContainer{
-    background-color: rgb(195, 195, 195);
+    background-color: rgba(195, 195, 195, 0.109);
+    margin: 10px 0px;
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 .step{
     padding:10px;
-    border-radius:50px;
+    border-radius:10px;
+    color:black;
+    font-size:0.7em;
 }
 .active{
-    background: pink;
+    background:rgb(251,194,235);
+    color: white;
+    font-size:1em;
 }

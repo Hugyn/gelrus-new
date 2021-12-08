@@ -1,37 +1,76 @@
 import React, {useEffect, useState} from 'react'
 import Image from 'next/image'
-
+import { useRouter } from 'next/router'
+import { useBetween } from 'use-between'
 import { motion } from "framer-motion"
+
 //-------Style--------
 import styles from '../../styles/Booking.module.css'
 
 //-------Components--------
 import DrawerComponent from '../../components/DrawerComponent';
+import NextButton from '../../components/buttons/NextButton'
 
-const Booking = () =>  {
+//-------Date--------
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import StaticDatePicker from '@mui/lab/StaticDatePicker';
+import CalendarPicker from '@mui/lab/CalendarPicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+
+
+const cards = [
+    {title: "Manicure", id:1, image: "manicure.png"},
+    {title: "Pedicure", id:2, image: "pedicure.png"},
+    {title: "Treatment", id:3, image: "treatment.png"},
+    {title: "Podiatry", id:4, image: "podiatry.png"},
+]
+
+
+const ComponentStates = () => {
+    const [services, setServices] = useState([]);
+
+    return {
+      services, setServices
+    };
+};
+
+const useSharedState = () => useBetween(ComponentStates);
+
+
+
+const Booking = (props) =>  {
+    const router = useRouter();
     const [bookingStateIndex, setBookingStateIndex] = useState(1);
-    const [services, setServices] = useState({data:null, canProceed:false});
-    const [date, setDateData] = useState({data:null, canProceed:false});
-    const [userDetails, setUserDetails] = useState({data:null, canProceed:false});
 
-    useEffect(()=> {
-        //Set session services to state
-        const sessionServices = JSON.parse(sessionStorage.getItem("services"));
-        setServices({data:sessionServices, canProceed:false});
-    },[])
+    const {services} = useSharedState();
+
+    useEffect(() => {
+        
+    },[]);
+
+    const handleBookingState = (target) => {
+        setBookingStateIndex(target.target.id)
+    }
+
+    const handleNextBookingState = () => {
+        if(router.query.book == "services" && services.length > 0){
+           setBookingStateIndex(()=> bookingStateIndex <= 3 ? bookingStateIndex + 1 : null);
+        }
+    }
 
     return (
-        <DrawerComponent bookingSteps={<BookingSteps onClick={(t)=> console.log(t)} current={bookingStateIndex}/>} animate={{height:'100%'}}>
+        <DrawerComponent breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={bookingStateIndex}/>} animate={{height:'100%'}}>
             {bookingStateIndex == 1 ?  
-             <Service proceedOnClick={()=> null} /> 
+            <Service proceedOnClick={()=> proceedOnClick()}/> 
             : 
             bookingStateIndex == 2 ? 
-            <Date canProceed={date.canProceed}/> 
+            <Date /> 
             : 
             bookingStateIndex == 3 ? 
-            <UserDetails canProceed={userDetails.canProceed}/> 
+            <UserDetails /> 
             : 
             null}
+            <NextButton onClick={()=> handleNextBookingState()}/>
         </DrawerComponent>
     )
 }
@@ -41,36 +80,33 @@ export default Booking;
 
 
 const Service = (props) => {
-    const [canProceed, setCanProceed] = useState(null);
-    const [services, setServices] = useState([]);
+    const {services, setServices} = useSharedState();
+    const router = useRouter();
+    const queryString = "services";
 
-    const cards = [
-        {title: "Manicure", id:1, image: "manicure.png"},
-        {title: "Pedicure", id:2, image: "pedicure.png"},
-        {title: "Treatment", id:3, image: "treatment.png"},
-        {title: "Podiatry", id:4, image: "podiatry.png"},
-    ]
-    
     const handleServices = (item) => {
         //When press on card, add the product to the services array
         //if product does not exist in array add else remove product
         if(services && !services.includes(item)){
             setServices([...services, item])
-            sessionStorage.setItem('services', JSON.stringify([...services,item]));
+            sessionStorage.setItem(queryString, JSON.stringify([...services,item]));
         } else {
             setServices(services.filter(function(service){
                 return service !== item
             }))
-            sessionStorage.setItem('services', JSON.stringify(services.filter(function(service){
+            sessionStorage.setItem(queryString, JSON.stringify(services.filter(function(service){
                 return service !== item
             })));
         }
     }
+    
 
     useEffect(()=> {
-      const getSession = JSON.parse(sessionStorage.getItem("services"));
-      setServices(getSession || []);
-      
+        router.push({query: {book: queryString}})
+        // Get session and store in the services state
+        const servicesFromSession = JSON.parse(sessionStorage.getItem("services"));
+        setServices(servicesFromSession || []);
+        
     },[])
     
     
@@ -79,13 +115,12 @@ const Service = (props) => {
             <div>choose Service</div>
             <div className={styles.servicesPickContainer}>
                 {services.map((service,index)=> (
-                    <div key={index} id={service} className={styles.serviceTag}>
-                        {service}
-                        <Image onClick={()=> handleServices(service)} className={styles.tagXicon} src="/x-icon.svg" width="20px" height="20px"/>
+                    <div onClick={()=> handleServices(service)} key={index} id={service} className={styles.serviceTag}>
+                        <span>{service}</span>
+                        <Image className={styles.tagXicon} src="/x-icon.svg" width="20px" height="20px"/>
                     </div>
                 ))}
             </div>
-
             <div className={styles.cards}>
                 {cards.map((item)=> 
                     <motion.div 
@@ -103,20 +138,33 @@ const Service = (props) => {
                     </motion.div>
                 )}
             </div>
-            
-            {canProceed ? 
-                <button onClick={props.proceedOnClick}>Next</button> 
-                : 
-                null
-            }
          </>
      )
  }
 
  const Date = (props) => {
-    
+    const router = useRouter();
+    const queryString = "date";
+    const [date, setDate] = useState(null);
+
+    async function get( ){
+        const res = await fetch('http://localhost:3000/api/calendar')
+        const posts = await res.json()
+        return posts
+    }
+    useEffect(() => {
+        router.push({query: {book: queryString}})
+        var date = new window.Date();
+        setDate(()=> date && date)
+
+        console.log(get())
+    },[])
+
+
     return(
-        <div>choose Date</div>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <CalendarPicker date={date} onChange={(newDate) => setDate(newDate)} />
+        </LocalizationProvider>
     )
 }
 
@@ -132,12 +180,20 @@ const BookingSteps = (props) => {
     const steps = [1, 2, 3];
     return(
         <div className={styles.bookingStepsContainer}>
-            {steps.map((_i, step)=> (
-                <div onClick={props.onClick} key={_i} className={`${styles.step} ${ props.current >= _i ? styles.active : null}`}>
+            {steps.map((step, _i)=> (
+                <div onClick={props.onClick} key={_i} id={step} className={`${styles.step} ${ props.current >= step ? styles.active : null}`}>
                     {step}
                 </div>
                 )
             )}
+        </div>
+    )
+}
+
+const ButtonProceed = (props) => {
+    return (
+        <div>
+
         </div>
     )
 }
