@@ -12,4 +12,4 @@ function GelrusWork() {
     )
 }
 
-export default gelrusWork;
+export default GelrusWork;
