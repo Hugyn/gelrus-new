@@ -146,25 +146,35 @@ const Service = (props) => {
     const router = useRouter();
     const queryString = "date";
     const [date, setDate] = useState(null);
+    const timesAvailiable = ["8:00", "9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"];
 
     async function get( ){
         const res = await fetch('http://localhost:3000/api/calendar')
         const posts = await res.json()
         return posts
     }
+
     useEffect(() => {
         router.push({query: {book: queryString}})
         var date = new window.Date();
         setDate(()=> date && date)
 
-        console.log(get())
+        // console.log(get())
     },[])
 
-
     return(
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <CalendarPicker date={date} onChange={(newDate) => setDate(newDate)} />
-        </LocalizationProvider>
+        <>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <CalendarPicker date={date} onChange={(newDate) => setDate(newDate)} />
+            </LocalizationProvider>
+
+            <div className={styles.timesContainer}>
+                {timesAvailiable.map((time ,_i)=> (
+                    <div className={styles.timeSlot}>{time}</div>
+                ))} 
+            </div>
+            
+        </>
     )
 }
 
