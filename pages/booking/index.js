@@ -117,7 +117,7 @@ const Service = (props) => {
             <div>choose Service</div>
             <div className={styles.servicesPickContainer}>
                 {services.map((service,index)=> (
-                    <motion.div animate={{opacity: 1}} initial={{opacity: 0}} onClick={()=> handleServices(service)} key={index} id={service} className={styles.serviceTag}>
+                    <motion.div  key={`service_${index}`} animate={{opacity: 1}} initial={{opacity: 0}} onClick={()=> handleServices(service)} id={service} className={styles.serviceTag}>
                         <span>{service}</span>
                         <Image className={styles.tagXicon} src="/x-icon.svg" width="20px" height="20px"/>
                     </motion.div>

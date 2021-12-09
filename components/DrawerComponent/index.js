@@ -14,7 +14,7 @@ function DrawerComponent(props) {
   const router = useRouter()
     return (
       <AnimatePresence exitBeforeEnter>
-            <Container>
+            <Container key="DrwerComponent">
               <motion.h3 
               className={styles.title}
               animate={{opacity:1, x:20}}

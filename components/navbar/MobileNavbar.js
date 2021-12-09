@@ -96,7 +96,7 @@ function MobileNavbar() {
                 <motion.div variants={variants} animate={isOpen ? "open" : "closed"}  className={styles.mobileNavLinksOuter}>
                   <img src="/Logo.svg" alt="Gelru's Logo" width="100px"/> 
                     {navItems.map((item,index)=> 
-                        <MenuItem className={styles.mobileNavLinks} link={item.link}>
+                        <MenuItem key={`navlink_${index+1}`} className={styles.mobileNavLinks} link={item.link}>
                             <motion.span key={`navlink_${index+1}`} variants={linksVariants}>{item.name}</motion.span>
                           </MenuItem>
                     )}
