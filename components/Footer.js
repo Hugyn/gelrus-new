@@ -20,7 +20,7 @@ function Footer() {
                     <li className={styles.listItem}>Cancel session</li>
                 </ul>
                 <ul>
-                    <li className={styles.listItem}>Contact Gelru's</li>
+                    <li className={styles.listItem}>Contact Gelru&apos;s</li>
                     <li className={styles.listItem}>Get help</li>
                     <li className={styles.listItem}>Privacy &amp; Policy</li>
                 </ul>
