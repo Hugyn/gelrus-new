@@ -59,7 +59,7 @@ const Booking = (props) =>  {
     }
 
     return (
-        <DrawerComponent breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={bookingStateIndex}/>} animate={{height:'100%'}}>
+        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={bookingStateIndex}/>} animate={{height:'82%'}}>
             {bookingStateIndex == 1 ?  
             <Service proceedOnClick={()=> proceedOnClick()}/> 
             : 

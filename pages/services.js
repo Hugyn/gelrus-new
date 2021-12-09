@@ -6,7 +6,7 @@ function GelrusServices() {
     const router = useRouter()
     console.log(router.query)
     return (
-        <DrawerComponent animate={{height:'100%'}} title="Services & Prices" >
+        <DrawerComponent animate={{height:'82%'}} title="Services & Prices" >
             <h3>Gelrus Working</h3>
         </DrawerComponent>
     )
