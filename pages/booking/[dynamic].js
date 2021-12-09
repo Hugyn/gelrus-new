@@ -9,7 +9,7 @@ function DynamicBooking() {
     const router = useRouter();
     return (
         <DrawerComponent 
-        animate={{height:"100%"}}
+        animate={{height:"82%"}}
         transition={{duration:.3}}
         childExit={{x:-1000}}
         childTransition={{duration:.3}}

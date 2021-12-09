@@ -53,8 +53,11 @@ const Booking = (props) =>  {
     }
 
     const handleNextBookingState = () => {
+        //Services
         if(router.query.book == "services" && services.length > 0){
            setBookingStateIndex(()=> bookingStateIndex <= 3 ? bookingStateIndex + 1 : null);
+        }else{
+            console.log("please select at least one")
         }
     }
 
@@ -109,16 +112,15 @@ const Service = (props) => {
         
     },[])
     
-    
     return (
          <>
             <div>choose Service</div>
             <div className={styles.servicesPickContainer}>
                 {services.map((service,index)=> (
-                    <div onClick={()=> handleServices(service)} key={index} id={service} className={styles.serviceTag}>
+                    <motion.div animate={{opacity: 1}} initial={{opacity: 0}} onClick={()=> handleServices(service)} key={index} id={service} className={styles.serviceTag}>
                         <span>{service}</span>
                         <Image className={styles.tagXicon} src="/x-icon.svg" width="20px" height="20px"/>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
             <div className={styles.cards}>

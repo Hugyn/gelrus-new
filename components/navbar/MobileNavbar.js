@@ -22,10 +22,7 @@ const MobileNavVariants = {
     closed: { opacity: 0, y: "-100%" },
   }
 
-const logoVariants = {
-    open: { y: "30px"},
-    closed: {},
-}
+
 
 const spring = {
   type: "spring",
@@ -68,7 +65,7 @@ const linksVariants = {
    {name: "Cancel Session", link:"cancel-booking"}];
 
 function MobileNavbar() {
-    const router = useRouter()
+    const router = useRouter();
     const [isOpen, setIsOpen] = useState(false)
     
     useEffect(()=> {
@@ -80,17 +77,18 @@ function MobileNavbar() {
     return (
         <div className={styles.mobileNavbar}>
             <BurgerMenu action={()=> setIsOpen(!isOpen)}/>
-            <motion.div
+            {/* <motion.div
             className={styles.mobileLogo}
             animate={isOpen ? "open" : "closed"}
             variants={logoVariants}
             transition={spring}
-            >
+            > */}
               {/* <img src="/Logo.svg" alt="Gelru's Logo" width="100px"/> */}
-            </motion.div>
+            {/* </motion.div> */}
            {/* Navbar Links */}
             <motion.div
                 className={styles.mobileNavLinksContainer}
+                initial={"closed"}
                 animate={isOpen ? "open" : "closed"}
                 variants={MobileNavVariants}
                 transition={spring}
@@ -98,8 +96,8 @@ function MobileNavbar() {
                 <motion.div variants={variants} animate={isOpen ? "open" : "closed"}  className={styles.mobileNavLinksOuter}>
                   <img src="/Logo.svg" alt="Gelru's Logo" width="100px"/> 
                     {navItems.map((item,index)=> 
-                        <MenuItem className={styles.mobileNavLinks} key={index} link={item.link}>
-                            <motion.span variants={linksVariants}>{item.name}</motion.span>
+                        <MenuItem className={styles.mobileNavLinks} link={item.link}>
+                            <motion.span key={`navlink_${index+1}`} variants={linksVariants}>{item.name}</motion.span>
                           </MenuItem>
                     )}
                 </motion.div>
