@@ -5,7 +5,7 @@ import styles from '../../styles/DynamicBooking.module.css'
 
 import BookNowButton from '../../components/buttons/BookNowButton'
 
-function dynamicBooking() {
+function DynamicBooking() {
     const router = useRouter();
     return (
         <DrawerComponent 
@@ -25,4 +25,4 @@ function dynamicBooking() {
     )
 }
 
-export default dynamicBooking;
+export default DynamicBooking;
