@@ -10,7 +10,7 @@ function BestClientsDeal() {
     return (
         <div className={styles.bestClientsDeal}>
             <h3 className={styles.bestClientsDealTitle}>Best Clients Deal</h3>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the nails. </p>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the nails. </p>
             <BookNowButton className={styles.bookNow} theme="pink"/>
         </div>
     )

@@ -22,7 +22,7 @@ function Footer() {
                 <ul>
                     <li className={styles.listItem}>Contact Gelru's</li>
                     <li className={styles.listItem}>Get help</li>
-                    <li className={styles.listItem}>Privacy & Policy</li>
+                    <li className={styles.listItem}>Privacy &amp; Policy</li>
                 </ul>
             </div>
             <div className={styles.bottomFooter}>
