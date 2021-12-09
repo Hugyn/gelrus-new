@@ -2,7 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router';
 import DrawerComponent from '../components/DrawerComponent';
 
-function gelrusWork() {
+function GelrusWork() {
     const router = useRouter()
     return (
         <DrawerComponent animate={{height:'100%'}} title="About Gelru's" >
@@ -11,4 +11,4 @@ function gelrusWork() {
     )
 }
 
-export default gelrusWork;
+export default GelrusWork;
