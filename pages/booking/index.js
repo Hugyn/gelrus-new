@@ -170,7 +170,7 @@ const Service = (props) => {
 
             <div className={styles.timesContainer}>
                 {timesAvailiable.map((time ,_i)=> (
-                    <div className={styles.timeSlot}>{time}</div>
+                    <div key={_i} className={styles.timeSlot}>{time}</div>
                 ))} 
             </div>
             

@@ -27,7 +27,7 @@ function Footer() {
             </div>
             <div className={styles.bottomFooter}>
                 <img className={styles.logoFooter} src="/Logo.svg" alt="Gelru's Logo" width="120px" />
-                <p>©  2021 gerul’s | All rights Reserved</p>
+                <p>©  2021 gerul&apos;s | All rights Reserved</p>
             </div>
         </motion.div>
     )

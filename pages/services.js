@@ -2,7 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router';
 import DrawerComponent from '../components/DrawerComponent';
 
-function gelrusWork() {
+function GelrusServices() {
     const router = useRouter()
     console.log(router.query)
     return (
@@ -12,4 +12,4 @@ function gelrusWork() {
     )
 }
 
-export default gelrusWork;
+export default GelrusServices;
