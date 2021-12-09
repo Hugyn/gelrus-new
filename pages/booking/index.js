@@ -28,9 +28,10 @@ const cards = [
 
 const ComponentStates = () => {
     const [services, setServices] = useState([]);
+    const [date, setDate] = useState(null);
 
     return {
-      services, setServices
+      services, setServices, date, setDate
     };
 };
 
@@ -40,36 +41,42 @@ const useSharedState = () => useBetween(ComponentStates);
 
 const Booking = (props) =>  {
     const router = useRouter();
-    const [bookingStateIndex, setBookingStateIndex] = useState(1);
+    const steps = ['services', 'date', 'user_detais'];
 
-    const {services} = useSharedState();
+    const {services, date} = useSharedState();
 
     useEffect(() => {
         
     },[]);
 
     const handleBookingState = (target) => {
-        setBookingStateIndex(target.target.id)
+        console.log(steps[target.target.id-1])
+        router.push({query:{book:[steps[target.target.id-1]]}})
     }
 
     const handleNextBookingState = () => {
         //Services
-        if(router.query.book == "services" && services.length > 0){
-           setBookingStateIndex(()=> bookingStateIndex <= 3 ? bookingStateIndex + 1 : null);
-        }else{
-            console.log("please select at least one")
+        if(router.query.book == 'services'){
+            if(services.length > 0){
+               router.push({query:{book: 'date'}})
+            }else{
+                alert('choose a service')
+            }
+        }
+        if(router.query.book == 'date'){
+            
         }
     }
 
     return (
-        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={bookingStateIndex}/>} animate={{height:'82%'}}>
-            {bookingStateIndex == 1 ?  
-            <Service proceedOnClick={()=> proceedOnClick()}/> 
+        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={steps.indexOf(router.query.book)+1}/>} animate={{height:'82%'}}>
+            {router.query.book == 'services' ?  
+            <Service /> 
             : 
-            bookingStateIndex == 2 ? 
+            router.query.book == 'date' ? 
             <Date /> 
             : 
-            bookingStateIndex == 3 ? 
+            router.query.book == 'user_detais' ? 
             <UserDetails /> 
             : 
             null}
@@ -147,7 +154,8 @@ const Service = (props) => {
  const Date = (props) => {
     const router = useRouter();
     const queryString = "date";
-    const [date, setDate] = useState(null);
+    const {date, setDate} = useSharedState(null);
+    const [dateQuery, setDateQuery] = useState(null);
     const timesAvailiable = ["8:00", "9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"];
 
     async function get( ){
@@ -160,14 +168,29 @@ const Service = (props) => {
         router.push({query: {book: queryString}})
         var date = new window.Date();
         setDate(()=> date && date)
-
-        // console.log(get())
     },[])
+
+    const handleGetBookings = (newDate) => {
+        //Get times availiable from dates
+        // const dateDay = ('0' + newDate.getDate()).slice(-2);
+        // const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
+        // const year = newDate.getFullYear();
+        // fetch(`http://localhost:3000/api/calendar?date=${year}-${month}-${dateDay}`)
+        // .then(response => {
+        //     if(response.ok){
+        //         return response.json()
+        //     }
+        //     throw response
+        // }).then(data => {
+        //     console.log(data)
+        // })
+        
+    }
 
     return(
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <CalendarPicker date={date} onChange={(newDate) => setDate(newDate)} />
+                <CalendarPicker date={date} onChange={(newDate) => handleGetBookings(newDate)} />
             </LocalizationProvider>
 
             <div className={styles.timesContainer}>
