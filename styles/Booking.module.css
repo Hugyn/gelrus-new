@@ -73,8 +73,11 @@
 /* Date Component */
 .timesContainer{
     display: grid;
+    position: relative;
     grid-template-columns: 20% 20% 20% 20%;
     gap: 20px 3px;
+    padding: 20px 8px;
+    top: -30px;
     justify-content: center;
     text-align: center;
     max-height: 150px;
@@ -82,6 +85,7 @@
 }
 
 .timeSlot{
+    position: relative;
     background-color:rgb(251,194,235);
     padding:8px 0px;
     border-radius:5px;
@@ -90,6 +94,31 @@
     max-width: 60px;
 }
 
+.loading{
+    width: 100%;
+    height: 100%;
+    border-radius:5px;
+    top: 0;
+    left: 0;
+    background-color:rgb(187, 187, 187);
+    position: absolute;
+    animation-duration: 1.25s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: darkgray;
+    background: linear-gradient(to right, #eeeeee 10%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+}
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
 
 /* Details Component */
 

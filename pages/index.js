@@ -39,11 +39,12 @@ function Home(props) {
             </motion.div>
 
             <motion.div 
-            className={styles.mobile}
-            exit={{opacity:0}}
-            initial={{opacity:0 , y:100}}
-            animate={{opacity:1, y:0}}
-            transition={{duration:0.5}}>
+                className={styles.mobile}
+                exit={{opacity:0}}
+                initial={{opacity:0 , y:100}}
+                animate={{opacity:1, y:0}}
+                transition={{duration:0.5}}
+            >
                 <div className={styles.mobileCardsContainer}>
                  <img src="/Logo.svg" alt="Gelru's Logo" width="100px"/> 
                     {cards.map((item)=> 

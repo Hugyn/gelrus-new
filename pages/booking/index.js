@@ -42,11 +42,15 @@ const useSharedState = () => useBetween(ComponentStates);
 const Booking = (props) =>  {
     const router = useRouter();
     const steps = ['services', 'date', 'user_detais'];
-
     const {services, date} = useSharedState();
 
     useEffect(() => {
-        
+        const bookingStage = router.query.book
+        if(services.length > 0 ){
+            router.push({query: {book: "date"}})
+        }else{
+            router.push({query: {book: "services"}})
+        }
     },[]);
 
     const handleBookingState = (target) => {
@@ -155,14 +159,9 @@ const Service = (props) => {
     const router = useRouter();
     const queryString = "date";
     const {date, setDate} = useSharedState(null);
-    const [dateQuery, setDateQuery] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [timesBooked, setTimesBooked] = useState([]);
     const timesAvailiable = ["8:00", "9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"];
-
-    async function get( ){
-        const res = await fetch('http://localhost:3000/api/calendar')
-        const posts = await res.json()
-        return posts
-    }
 
     useEffect(() => {
         router.push({query: {book: queryString}})
@@ -171,33 +170,43 @@ const Service = (props) => {
     },[])
 
     const handleGetBookings = (newDate) => {
-        //Get times availiable from dates
-        // const dateDay = ('0' + newDate.getDate()).slice(-2);
-        // const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
-        // const year = newDate.getFullYear();
-        // fetch(`http://localhost:3000/api/calendar?date=${year}-${month}-${dateDay}`)
-        // .then(response => {
-        //     if(response.ok){
-        //         return response.json()
-        //     }
-        //     throw response
-        // }).then(data => {
-        //     console.log(data)
-        // })
-        
-    }
+        setLoading(true);
+        // Get times availiable from dates
+        setDate(newDate)
+        const dateDay = ('0' + newDate.getDate()).slice(-2);
+        const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
+        const year = newDate.getFullYear();
 
+        fetch(`http://localhost:3000/api/calendar?date=${year}-${month}-${dateDay}`)
+        .then(response => {
+            if(response.ok){
+                return response.json()
+            }
+            throw response
+        }).then(data => {
+            setTimesBooked(data.timesBooked)
+            setLoading(false);
+            console.log(timesBooked)
+        })
+    }
+    
     return(
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <CalendarPicker date={date} onChange={(newDate) => handleGetBookings(newDate)} />
             </LocalizationProvider>
-
+        
             <div className={styles.timesContainer}>
                 {timesAvailiable.map((time ,_i)=> (
-                    <div key={_i} className={styles.timeSlot}>{time}</div>
+                    
+                    <div key={_i} className={`${styles.timeSlot}`}>
+                        {loading && loading ? <div className={styles.loading}></div> : null}
+                        {time}
+                    </div>
                 ))} 
             </div>
+         
+            
             
         </>
     )

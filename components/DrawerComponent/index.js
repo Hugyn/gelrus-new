@@ -27,10 +27,10 @@ function DrawerComponent(props) {
             
             <motion.div 
             className={styles.bookNowContent}
-            exit={props.childExit}
-            animate={props.childAnimate}
-            initial={props.childInitial}
-            transition={props.childTransition}
+            exit={props.exit}
+            animate={props.animate}
+            initial={props.initial}
+            transition={props.transition}
             >
               <Container>
                 {props.children}
