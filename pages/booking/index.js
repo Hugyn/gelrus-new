@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useBetween } from 'use-between'
 import { motion } from "framer-motion"
+import absoluteUrl from 'next-absolute-url'
 
 //-------Style--------
 import styles from '../../styles/Booking.module.css'
@@ -13,7 +14,6 @@ import NextButton from '../../components/buttons/NextButton'
 
 //-------Date--------
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import StaticDatePicker from '@mui/lab/StaticDatePicker';
 import CalendarPicker from '@mui/lab/CalendarPicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
@@ -43,6 +43,7 @@ const Booking = (props) =>  {
     const router = useRouter();
     const steps = ['services', 'date', 'user_detais'];
     const {services, date} = useSharedState();
+    
 
     useEffect(() => {
         const bookingStage = router.query.book
@@ -158,6 +159,7 @@ const Service = (props) => {
  const Date = (props) => {
     const router = useRouter();
     const queryString = "date";
+    // const { origin } = absoluteUrl(req, "localhost:3000")
     const {date, setDate} = useSharedState(null);
     const [loading, setLoading] = useState(false);
     const [timesBooked, setTimesBooked] = useState([]);
@@ -177,7 +179,7 @@ const Service = (props) => {
         const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
         const year = newDate.getFullYear();
 
-        fetch(`http://localhost:3000/api/calendar?date=${year}-${month}-${dateDay}`)
+        fetch(`/api/calendar?date=${year}-${month}-${dateDay}`)
         .then(response => {
             if(response.ok){
                 return response.json()

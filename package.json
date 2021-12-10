@@ -23,6 +23,7 @@
     "date-fns": "^2.25.0",
     "framer-motion": "^4.1.17",
     "next": "^11.1.2",
+    "next-absolute-url": "^1.2.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-scrollama": "^2.2.16",
