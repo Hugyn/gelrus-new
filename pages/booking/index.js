@@ -74,7 +74,7 @@ const Booking = (props) =>  {
     }
 
     return (
-        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={steps.indexOf(router.query.book)+1}/>} animate={{height:'82%'}}>
+        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={steps.indexOf(router.query.book)+1}/>} initial={{height:0}} animate={{height:'82%'}}>
             {router.query.book == 'services' ?  
             <Service /> 
             : 
@@ -201,8 +201,8 @@ const Service = (props) => {
             <div className={styles.timesContainer}>
                 {timesAvailiable.map((time ,_i)=> (
                     
-                    <div key={_i} className={`${styles.timeSlot}`}>
-                        {loading && loading ? <div className={styles.loading}></div> : null}
+                    <div key={_i} className={`${styles.timeSlot} ${timesBooked.includes(time) ? styles.booked : ""}`}>
+                        {loading && loading ? <motion.div animate={{opacity:1}} initial={{opacity:0}} className={styles.loading}></motion.div> : null}
                         {time}
                     </div>
                 ))} 
