@@ -80,6 +80,7 @@
     top: -30px;
     justify-content: center;
     text-align: center;
+    height: 150px;
     max-height: 150px;
     overflow:scroll;
 }

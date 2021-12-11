@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, Fragment} from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useBetween } from 'use-between'
-import { motion } from "framer-motion"
+import { motion, AnimatePresence} from "framer-motion"
 import absoluteUrl from 'next-absolute-url'
 
 //-------Style--------
@@ -16,6 +16,7 @@ import NextButton from '../../components/buttons/NextButton'
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CalendarPicker from '@mui/lab/CalendarPicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import Input from '../../components/input/Input'
 
 
 const cards = [
@@ -41,12 +42,15 @@ const useSharedState = () => useBetween(ComponentStates);
 
 const Booking = (props) =>  {
     const router = useRouter();
-    const steps = ['services', 'date', 'user_detais'];
+    const steps = ['services', 'date', 'user_details'];
     const {services, date} = useSharedState();
+    const bookingStage = router.query.book
+    let innerHeight;
     
-
     useEffect(() => {
-        const bookingStage = router.query.book
+        
+        innerHeight = window.innerHeight
+        console.log(innerHeight)
         if(services.length > 0 ){
             router.push({query: {book: "date"}})
         }else{
@@ -55,7 +59,6 @@ const Booking = (props) =>  {
     },[]);
 
     const handleBookingState = (target) => {
-        console.log(steps[target.target.id-1])
         router.push({query:{book:[steps[target.target.id-1]]}})
     }
 
@@ -69,24 +72,38 @@ const Booking = (props) =>  {
             }
         }
         if(router.query.book == 'date'){
-            
+            if(date){
+                // console.log(date)
+                router.push({query:{book: 'user_details'}})
+            }else{
+                alert('please choose time')
+            }
         }
     }
 
     return (
+        <Fragment>
         <DrawerComponent title="Book Now" breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={steps.indexOf(router.query.book)+1}/>} initial={{height:0}} animate={{height:'82%'}}>
-            {router.query.book == 'services' ?  
-            <Service /> 
-            : 
-            router.query.book == 'date' ? 
-            <Date /> 
-            : 
-            router.query.book == 'user_detais' ? 
-            <UserDetails /> 
-            : 
-            null}
-            <NextButton onClick={()=> handleNextBookingState()}/>
+            <AnimatePresence exitBeforeEnter>
+                {bookingStage == 'services' ?  
+                    <Service exit={{x:-300}} animate={{x:0}} initial={bookingStage == 'date' ? {x:300} : {x:-300}} transition={{stiffness:100, duration:0.5}}/> 
+                : null}
+            </AnimatePresence>
+
+            <AnimatePresence >
+                {bookingStage == 'date'  ? 
+                    <Date exit={{x:300, opacity:0}} animate={{x:0}} initial={{x:300}} transition={{stiffness:100, duration:.4}}/> 
+                : null}
+            </AnimatePresence>
+
+            <AnimatePresence exitBeforeEnter>
+                {bookingStage == 'user_details' ? 
+                <UserDetails /> 
+                : null}
+            </AnimatePresence>
+            <NextButton text={bookingStage == 'user_details' ? 'CONFIRM BOOKING' : null} onClick={()=> handleNextBookingState()}/>
         </DrawerComponent>
+        </Fragment>
     )
 }
 
@@ -115,7 +132,6 @@ const Service = (props) => {
         }
     }
     
-
     useEffect(()=> {
         router.push({query: {book: queryString}})
         // Get session and store in the services state
@@ -125,11 +141,11 @@ const Service = (props) => {
     },[])
     
     return (
-         <>
-            <div>choose Service</div>
+        <motion.div exit={props.exit} transition={props.transition} initial={props.initial} animate={props.animate}>
+            <motion.div>choose Service</motion.div>
             <div className={styles.servicesPickContainer}>
                 {services.map((service,index)=> (
-                    <motion.div  key={`service_${index}`} animate={{opacity: 1}} initial={{opacity: 0}} onClick={()=> handleServices(service)} id={service} className={styles.serviceTag}>
+                    <motion.div key={`service_${index}`} exit={{opacity:0}} animate={{opacity: 1}} initial={{opacity: 0}} onClick={()=> handleServices(service)} id={service} className={styles.serviceTag}>
                         <span>{service}</span>
                         <Image className={styles.tagXicon} src="/x-icon.svg" width="20px" height="20px"/>
                     </motion.div>
@@ -152,7 +168,7 @@ const Service = (props) => {
                     </motion.div>
                 )}
             </div>
-         </>
+         </motion.div>
      )
  }
 
@@ -160,21 +176,23 @@ const Service = (props) => {
     const router = useRouter();
     const queryString = "date";
     // const { origin } = absoluteUrl(req, "localhost:3000")
-    const {date, setDate} = useSharedState(null);
+    const [dateObj, setDateObj] = useState(null);
     const [loading, setLoading] = useState(false);
+    const {date, setDate} = useSharedState(null);
     const [timesBooked, setTimesBooked] = useState([]);
     const timesAvailiable = ["8:00", "9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00"];
 
     useEffect(() => {
         router.push({query: {book: queryString}})
         var date = new window.Date();
-        setDate(()=> date && date)
+        setDateObj(()=> date && date)
     },[])
 
     const handleGetBookings = (newDate) => {
+        setDate(null)
         setLoading(true);
         // Get times availiable from dates
-        setDate(newDate)
+        setDateObj(newDate)
         const dateDay = ('0' + newDate.getDate()).slice(-2);
         const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
         const year = newDate.getFullYear();
@@ -186,38 +204,47 @@ const Service = (props) => {
             }
             throw response
         }).then(data => {
-            setTimesBooked(data.timesBooked)
+            setTimesBooked(data.timesBooked) 
             setLoading(false);
-            console.log(timesBooked)
         })
     }
-    
+
+    const handleSelectDateAndTime = (time) => {
+        setDate({time:time, date:dateObj})
+        router.push({query:{book:'user_details'}})
+    }
+
     return(
-        <>
+        <motion.div  exit={props.exit} transition={props.transition} initial={props.initial} animate={props.animate}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <CalendarPicker date={date} onChange={(newDate) => handleGetBookings(newDate)} />
+                <CalendarPicker date={dateObj} onChange={(newDate) => handleGetBookings(newDate)} />
             </LocalizationProvider>
-        
+
             <div className={styles.timesContainer}>
                 {timesAvailiable.map((time ,_i)=> (
-                    
-                    <div key={_i} className={`${styles.timeSlot} ${timesBooked.includes(time) ? styles.booked : ""}`}>
+                    <div onClick={()=> handleSelectDateAndTime(time)} key={_i} className={`${styles.timeSlot} ${timesBooked.includes(time) ? styles.booked : ""}`}>
                         {loading && loading ? <motion.div animate={{opacity:1}} initial={{opacity:0}} className={styles.loading}></motion.div> : null}
                         {time}
                     </div>
                 ))} 
             </div>
-         
             
-            
-        </>
+        </motion.div>
     )
 }
 
 
 const UserDetails = (props) => {
     return(
-        <div>Enter Details</div>
+        <Fragment>
+            <Input placeholder="Name"/>
+            <br/>
+            <Input placeholder="Surname"/>
+            <br/>
+            <Input placeholder="Email"/>
+            <br/>
+            <Input placeholder="Confirm Email"/>
+        </Fragment>
     )
 }
 

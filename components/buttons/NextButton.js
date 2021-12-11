@@ -12,7 +12,7 @@ import { motion } from "framer-motion"
 const NextButton = (props) => {
     return (
         <div onClick={props.onClick} className={styles.buttonNext}>
-            NEXT
+            {props.text ? props.text : "NEXT"}
             <motion.span className={styles.buttonNextIcon} animate={props.animate} initial={props.initial} transition={props.transition}>
                 <FontAwesomeIcon icon={faArrowAltCircleRight} style={{fontSize:"28px"}} />
             </motion.span>
