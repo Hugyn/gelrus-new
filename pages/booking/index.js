@@ -44,11 +44,11 @@ const Booking = (props) =>  {
     const router = useRouter();
     const steps = ['services', 'date', 'user_details'];
     const {services, date} = useSharedState();
-    const bookingStage = router.query.book
+    
+    const bookingStage = router.query.book;
     let innerHeight;
     
     useEffect(() => {
-        
         innerHeight = window.innerHeight
         console.log(innerHeight)
         if(services.length > 0 ){
@@ -80,10 +80,10 @@ const Booking = (props) =>  {
             }
         }
     }
-
+    
     return (
         <Fragment>
-        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps onClick={(target)=> handleBookingState(target)} current={steps.indexOf(router.query.book)+1}/>} initial={{height:0}} animate={{height:'82%'}}>
+        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps date={date} onClick={(target)=> handleBookingState(target)} current={steps.indexOf(router.query.book)+1}/>} initial={{height:0}} animate={{height:'82%'}}>
             <AnimatePresence exitBeforeEnter>
                 {bookingStage == 'services' ?  
                     <Service exit={{x:-300}} animate={{x:0}} initial={bookingStage == 'date' ? {x:300} : {x:-300}} transition={{stiffness:100, duration:0.5}}/> 
@@ -254,8 +254,13 @@ const BookingSteps = (props) => {
     return(
         <div className={styles.bookingStepsContainer}>
             {steps.map((step, _i)=> (
-                <div onClick={props.onClick} key={_i} id={step} className={`${styles.step} ${ props.current >= step ? styles.active : null}`}>
-                    {step}
+                <div>
+                    <div onClick={props.onClick} key={_i} id={step} className={`${styles.step} ${ props.current >= step ? styles.active : null}`}>
+                        {step}
+                    </div>
+                    <span>
+                        {step == 1 ? props.services : step == 2 ? props.date : step == 3 ? props.user_details : null}
+                    </span>
                 </div>
                 )
             )}
