@@ -17,6 +17,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CalendarPicker from '@mui/lab/CalendarPicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import Input from '../../components/input/Input'
+import { set } from 'date-fns/esm'
 
 
 const cards = [
@@ -44,24 +45,23 @@ const Booking = (props) =>  {
     const router = useRouter();
     const steps = ['services', 'date', 'user_details'];
     const {services, date} = useSharedState();
-    
     const bookingStage = router.query.book;
+    const dateForBreadcrumb = date && [`${date.date.getDay()}-${date.date.getMonth()}-${date.date.getFullYear()}`, date.time]
     let innerHeight;
-    
     useEffect(() => {
         innerHeight = window.innerHeight
-        console.log(innerHeight)
-        if(services.length > 0 ){
-            router.push({query: {book: "date"}})
-        }else{
-            router.push({query: {book: "services"}})
-        }
+        // if(services.length > 0 ){
+        //     router.push({query: {book: "date"}})
+        // }else{
+        //     router.push({query: {book: "services"}})
+        // }
     },[]);
 
     const handleBookingState = (target) => {
         router.push({query:{book:[steps[target.target.id-1]]}})
     }
 
+    
     const handleNextBookingState = () => {
         //Services
         if(router.query.book == 'services'){
@@ -73,7 +73,7 @@ const Booking = (props) =>  {
         }
         if(router.query.book == 'date'){
             if(date){
-                // console.log(date)
+               
                 router.push({query:{book: 'user_details'}})
             }else{
                 alert('please choose time')
@@ -83,7 +83,7 @@ const Booking = (props) =>  {
     
     return (
         <Fragment>
-        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps date={date} onClick={(target)=> handleBookingState(target)} current={steps.indexOf(router.query.book)+1}/>} initial={{height:0}} animate={{height:'82%'}}>
+        <DrawerComponent title="Book Now" breadcrumb={<BookingSteps services={services} date={dateForBreadcrumb} onClick={(target)=> handleBookingState(target)} current={steps.indexOf(router.query.book)+1}/>} initial={{height:0}} animate={{height:'82%'}}>
             <AnimatePresence exitBeforeEnter>
                 {bookingStage == 'services' ?  
                     <Service exit={{x:-300}} animate={{x:0}} initial={bookingStage == 'date' ? {x:300} : {x:-300}} transition={{stiffness:100, duration:0.5}}/> 
@@ -211,7 +211,7 @@ const Service = (props) => {
 
     const handleSelectDateAndTime = (time) => {
         setDate({time:time, date:dateObj})
-        router.push({query:{book:'user_details'}})
+        // router.push({query:{book:'user_details'}})
     }
 
     return(
@@ -235,18 +235,40 @@ const Service = (props) => {
 
 
 const UserDetails = (props) => {
+    const [userDetails, setUserDetails] = useState({name:"",surname:"", email:""})
+    const [confirmEmailError, setConfirmEmailError] = useState(false)
+    function onInput(event) {
+        let input = event.target.name
+        let inputVal = event.target.value
+        
+        if(input == "confirm_email"){
+            inputVal == userDetails.email ? setConfirmEmailError(false) : setConfirmEmailError(true)
+            
+        }else{
+            setUserDetails({...userDetails,[input]:inputVal})
+        }
+        console.log(userDetails)
+    }
+
     return(
         <Fragment>
-            <Input placeholder="Name"/>
             <br/>
-            <Input placeholder="Surname"/>
+            <Input tabIndex="1" name="name" placeholder="Name" onChange={(event)=> onInput(event)}/>
             <br/>
-            <Input placeholder="Email"/>
+            <Input name="surname" placeholder="Surname" onChange={(event)=> onInput(event)}/>
             <br/>
-            <Input placeholder="Confirm Email"/>
+            <Input name="email" placeholder="Email" onChange={(event)=> onInput(event)}/>
+            <br/>
+            <Input name="confirm_email" placeholder="Confirm Email" onChange={(event)=> onInput(event)}/>
+            {confirmEmailError ? <p>email does not match</p> : null}
         </Fragment>
     )
 }
+
+const stepsInfoGenerator = (steps) => steps.map((step, _i) => <span key={step+_i}>{step}</span>)
+
+        
+        
 
 
 const BookingSteps = (props) => {
@@ -254,13 +276,13 @@ const BookingSteps = (props) => {
     return(
         <div className={styles.bookingStepsContainer}>
             {steps.map((step, _i)=> (
-                <div>
+                <div key={`steps_${step}`} className={styles.relative}>
                     <div onClick={props.onClick} key={_i} id={step} className={`${styles.step} ${ props.current >= step ? styles.active : null}`}>
                         {step}
                     </div>
-                    <span>
-                        {step == 1 ? props.services : step == 2 ? props.date : step == 3 ? props.user_details : null}
-                    </span>
+                    <div className={styles.stepInfo}>
+                        {step == 1 && props.services ? stepsInfoGenerator(props.services) : step == 2 && props.date ? stepsInfoGenerator(props.date) : step == 3 && props.user_details ? stepsInfoGenerator(props.user_details) : null}
+                    </div>
                 </div>
                 )
             )}
@@ -268,10 +290,3 @@ const BookingSteps = (props) => {
     )
 }
 
-const ButtonProceed = (props) => {
-    return (
-        <div>
-
-        </div>
-    )
-}

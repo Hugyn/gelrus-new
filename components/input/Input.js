@@ -102,9 +102,17 @@ const [isFilled, setIsFilled] = useState(false)
       }
   }
 
+  function onFocusOut(e){
+    
+    if(e.target.value.length > 0){
+      setIsFilled(true)
+   }else if(e.target.value.length < 1){
+       setIsFilled(false)
+   }
+  }
     return (
         <InputOuterBorder>
-                <StyledInput tabIndex={props.tabIndex} onKeyPress={props.onKeyPress} onBlur={props.onBlur} name={props.name} onChange={props.onChange} onFocus={()=>setIsFilled(true)} onInput={(e)=> handleOnInput(e)} />
+                <StyledInput onBlur={(e)=> onFocusOut(e)} tabIndex={props.tabIndex} onKeyPress={props.onKeyPress} name={props.name} onChange={props.onChange} onFocus={()=>setIsFilled(true)} onInput={(e)=> handleOnInput(e)} />
                 <InputInner  style={isFilled ? inputStyle.filled : inputStyle.notFilled}/>
                 <Placeholder style={isFilled ? placeholderStyle.filled : placeholderStyle.notFilled}>{props.placeholder}</Placeholder>
         </InputOuterBorder>
