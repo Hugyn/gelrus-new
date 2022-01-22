@@ -240,7 +240,9 @@ const UserDetails = (props) => {
     function onInput(event) {
         let input = event.target.name
         let inputVal = event.target.value
-        
+        if(inputVal == "lavinia"){
+            alert("EAEEEE OTARIAA KAK")
+        }
         if(input == "confirm_email"){
             inputVal == userDetails.email ? setConfirmEmailError(false) : setConfirmEmailError(true)
             
